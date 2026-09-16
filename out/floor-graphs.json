@@ -1,0 +1,2012 @@
+[
+ {
+  "building": "AB",
+  "floor": "01",
+  "rooms": 27,
+  "corridors": 2,
+  "doors": 21,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 77
+ },
+ {
+  "building": "AB",
+  "floor": "02",
+  "rooms": 14,
+  "corridors": 3,
+  "doors": 2,
+  "room_to_room": 9,
+  "inferred_doors": 0,
+  "wall_crossings": 11
+ },
+ {
+  "building": "AB",
+  "floor": "03",
+  "rooms": 14,
+  "corridors": 2,
+  "doors": 2,
+  "room_to_room": 10,
+  "inferred_doors": 0,
+  "wall_crossings": 8
+ },
+ {
+  "building": "AB",
+  "floor": "04",
+  "rooms": 15,
+  "corridors": 3,
+  "doors": 2,
+  "room_to_room": 10,
+  "inferred_doors": 0,
+  "wall_crossings": 19
+ },
+ {
+  "building": "AB",
+  "floor": "05",
+  "rooms": 19,
+  "corridors": 3,
+  "doors": 10,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 54
+ },
+ {
+  "building": "AB",
+  "floor": "06",
+  "rooms": 135,
+  "corridors": 18,
+  "doors": 105,
+  "room_to_room": 12,
+  "inferred_doors": 0,
+  "wall_crossings": 200
+ },
+ {
+  "building": "AB",
+  "floor": "07",
+  "rooms": 54,
+  "corridors": 6,
+  "doors": 40,
+  "room_to_room": 8,
+  "inferred_doors": 0,
+  "wall_crossings": 106
+ },
+ {
+  "building": "AB",
+  "floor": "08RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "AD",
+  "floor": "01",
+  "rooms": 137,
+  "corridors": 22,
+  "doors": 102,
+  "room_to_room": 13,
+  "inferred_doors": 0,
+  "wall_crossings": 218
+ },
+ {
+  "building": "AD",
+  "floor": "02",
+  "rooms": 167,
+  "corridors": 13,
+  "doors": 129,
+  "room_to_room": 25,
+  "inferred_doors": 0,
+  "wall_crossings": 206
+ },
+ {
+  "building": "AD",
+  "floor": "03",
+  "rooms": 7,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "AD",
+  "floor": "04RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "AD",
+  "floor": "B1",
+  "rooms": 145,
+  "corridors": 12,
+  "doors": 107,
+  "room_to_room": 26,
+  "inferred_doors": 0,
+  "wall_crossings": 148
+ },
+ {
+  "building": "AU",
+  "floor": "01",
+  "rooms": 49,
+  "corridors": 7,
+  "doors": 29,
+  "room_to_room": 13,
+  "inferred_doors": 0,
+  "wall_crossings": 55
+ },
+ {
+  "building": "AU",
+  "floor": "02",
+  "rooms": 90,
+  "corridors": 1,
+  "doors": 40,
+  "room_to_room": 49,
+  "inferred_doors": 0,
+  "wall_crossings": 60
+ },
+ {
+  "building": "AU",
+  "floor": "03",
+  "rooms": 90,
+  "corridors": 1,
+  "doors": 40,
+  "room_to_room": 49,
+  "inferred_doors": 0,
+  "wall_crossings": 61
+ },
+ {
+  "building": "AU",
+  "floor": "04",
+  "rooms": 94,
+  "corridors": 1,
+  "doors": 42,
+  "room_to_room": 51,
+  "inferred_doors": 0,
+  "wall_crossings": 63
+ },
+ {
+  "building": "AU",
+  "floor": "05",
+  "rooms": 94,
+  "corridors": 1,
+  "doors": 42,
+  "room_to_room": 51,
+  "inferred_doors": 0,
+  "wall_crossings": 65
+ },
+ {
+  "building": "AU",
+  "floor": "06",
+  "rooms": 94,
+  "corridors": 1,
+  "doors": 42,
+  "room_to_room": 51,
+  "inferred_doors": 0,
+  "wall_crossings": 64
+ },
+ {
+  "building": "AU",
+  "floor": "07",
+  "rooms": 97,
+  "corridors": 4,
+  "doors": 59,
+  "room_to_room": 34,
+  "inferred_doors": 0,
+  "wall_crossings": 87
+ },
+ {
+  "building": "AU",
+  "floor": "08",
+  "rooms": 94,
+  "corridors": 1,
+  "doors": 42,
+  "room_to_room": 51,
+  "inferred_doors": 0,
+  "wall_crossings": 65
+ },
+ {
+  "building": "AU",
+  "floor": "09",
+  "rooms": 94,
+  "corridors": 1,
+  "doors": 42,
+  "room_to_room": 51,
+  "inferred_doors": 0,
+  "wall_crossings": 65
+ },
+ {
+  "building": "AU",
+  "floor": "10",
+  "rooms": 4,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "AU",
+  "floor": "11RF",
+  "rooms": 4,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "AU",
+  "floor": "B1",
+  "rooms": 28,
+  "corridors": 6,
+  "doors": 20,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 46
+ },
+ {
+  "building": "BI",
+  "floor": "01",
+  "rooms": 152,
+  "corridors": 16,
+  "doors": 96,
+  "room_to_room": 40,
+  "inferred_doors": 0,
+  "wall_crossings": 177
+ },
+ {
+  "building": "BI",
+  "floor": "02",
+  "rooms": 187,
+  "corridors": 16,
+  "doors": 130,
+  "room_to_room": 41,
+  "inferred_doors": 0,
+  "wall_crossings": 194
+ },
+ {
+  "building": "BI",
+  "floor": "03",
+  "rooms": 161,
+  "corridors": 11,
+  "doors": 114,
+  "room_to_room": 36,
+  "inferred_doors": 0,
+  "wall_crossings": 162
+ },
+ {
+  "building": "BI",
+  "floor": "04",
+  "rooms": 192,
+  "corridors": 20,
+  "doors": 138,
+  "room_to_room": 34,
+  "inferred_doors": 0,
+  "wall_crossings": 191
+ },
+ {
+  "building": "BI",
+  "floor": "05",
+  "rooms": 196,
+  "corridors": 16,
+  "doors": 133,
+  "room_to_room": 47,
+  "inferred_doors": 0,
+  "wall_crossings": 214
+ },
+ {
+  "building": "BI",
+  "floor": "06",
+  "rooms": 9,
+  "corridors": 2,
+  "doors": 3,
+  "room_to_room": 3,
+  "inferred_doors": 1,
+  "wall_crossings": 46
+ },
+ {
+  "building": "BI",
+  "floor": "07RF",
+  "rooms": 12,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 8,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "BI",
+  "floor": "B1",
+  "rooms": 171,
+  "corridors": 25,
+  "doors": 103,
+  "room_to_room": 43,
+  "inferred_doors": 0,
+  "wall_crossings": 180
+ },
+ {
+  "building": "BI",
+  "floor": "B2",
+  "rooms": 9,
+  "corridors": 1,
+  "doors": 3,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 9
+ },
+ {
+  "building": "CC",
+  "floor": "01",
+  "rooms": 38,
+  "corridors": 2,
+  "doors": 11,
+  "room_to_room": 25,
+  "inferred_doors": 0,
+  "wall_crossings": 17
+ },
+ {
+  "building": "CC",
+  "floor": "02RF",
+  "rooms": 5,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CC",
+  "floor": "B1",
+  "rooms": 2,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CCIT",
+  "floor": "01",
+  "rooms": 46,
+  "corridors": 6,
+  "doors": 35,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 45
+ },
+ {
+  "building": "CCIT",
+  "floor": "02",
+  "rooms": 53,
+  "corridors": 9,
+  "doors": 39,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 59
+ },
+ {
+  "building": "CCIT",
+  "floor": "03",
+  "rooms": 55,
+  "corridors": 6,
+  "doors": 46,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 70
+ },
+ {
+  "building": "CCIT",
+  "floor": "04",
+  "rooms": 15,
+  "corridors": 4,
+  "doors": 9,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 15
+ },
+ {
+  "building": "CCIT",
+  "floor": "05RF",
+  "rooms": 2,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CCIT",
+  "floor": "B1",
+  "rooms": 56,
+  "corridors": 7,
+  "doors": 34,
+  "room_to_room": 15,
+  "inferred_doors": 0,
+  "wall_crossings": 58
+ },
+ {
+  "building": "CCIT",
+  "floor": "B2",
+  "rooms": 9,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 8,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CD",
+  "floor": "01",
+  "rooms": 299,
+  "corridors": 5,
+  "doors": 160,
+  "room_to_room": 133,
+  "inferred_doors": 1,
+  "wall_crossings": 180
+ },
+ {
+  "building": "CD",
+  "floor": "02",
+  "rooms": 326,
+  "corridors": 8,
+  "doors": 186,
+  "room_to_room": 131,
+  "inferred_doors": 1,
+  "wall_crossings": 211
+ },
+ {
+  "building": "CD",
+  "floor": "03",
+  "rooms": 333,
+  "corridors": 5,
+  "doors": 186,
+  "room_to_room": 142,
+  "inferred_doors": 0,
+  "wall_crossings": 204
+ },
+ {
+  "building": "CD",
+  "floor": "04",
+  "rooms": 334,
+  "corridors": 5,
+  "doors": 189,
+  "room_to_room": 140,
+  "inferred_doors": 0,
+  "wall_crossings": 206
+ },
+ {
+  "building": "CD",
+  "floor": "05",
+  "rooms": 220,
+  "corridors": 2,
+  "doors": 149,
+  "room_to_room": 69,
+  "inferred_doors": 0,
+  "wall_crossings": 156
+ },
+ {
+  "building": "CD",
+  "floor": "06",
+  "rooms": 9,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 9,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CD",
+  "floor": "07",
+  "rooms": 3,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CD",
+  "floor": "08RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CD",
+  "floor": "B1",
+  "rooms": 25,
+  "corridors": 3,
+  "doors": 22,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 31
+ },
+ {
+  "building": "CDC",
+  "floor": "01",
+  "rooms": 102,
+  "corridors": 10,
+  "doors": 75,
+  "room_to_room": 17,
+  "inferred_doors": 0,
+  "wall_crossings": 112
+ },
+ {
+  "building": "CDC",
+  "floor": "02",
+  "rooms": 96,
+  "corridors": 8,
+  "doors": 72,
+  "room_to_room": 15,
+  "inferred_doors": 0,
+  "wall_crossings": 90
+ },
+ {
+  "building": "CDC",
+  "floor": "03",
+  "rooms": 94,
+  "corridors": 8,
+  "doors": 84,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 124
+ },
+ {
+  "building": "CDC",
+  "floor": "04",
+  "rooms": 105,
+  "corridors": 13,
+  "doors": 85,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 138
+ },
+ {
+  "building": "CDC",
+  "floor": "05",
+  "rooms": 8,
+  "corridors": 2,
+  "doors": 4,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 8
+ },
+ {
+  "building": "CDC",
+  "floor": "06RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CDC",
+  "floor": "B1",
+  "rooms": 19,
+  "corridors": 7,
+  "doors": 12,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 37
+ },
+ {
+  "building": "CHC",
+  "floor": "01",
+  "rooms": 44,
+  "corridors": 5,
+  "doors": 31,
+  "room_to_room": 8,
+  "inferred_doors": 0,
+  "wall_crossings": 47
+ },
+ {
+  "building": "CHC",
+  "floor": "02",
+  "rooms": 33,
+  "corridors": 3,
+  "doors": 25,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 36
+ },
+ {
+  "building": "CHC",
+  "floor": "03",
+  "rooms": 27,
+  "corridors": 5,
+  "doors": 21,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 38
+ },
+ {
+  "building": "CHC",
+  "floor": "04",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CHC",
+  "floor": "05RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CHC",
+  "floor": "B1",
+  "rooms": 20,
+  "corridors": 3,
+  "doors": 10,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 16
+ },
+ {
+  "building": "CHD",
+  "floor": "01",
+  "rooms": 35,
+  "corridors": 7,
+  "doors": 28,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 48
+ },
+ {
+  "building": "CHD",
+  "floor": "02",
+  "rooms": 33,
+  "corridors": 4,
+  "doors": 24,
+  "room_to_room": 4,
+  "inferred_doors": 1,
+  "wall_crossings": 38
+ },
+ {
+  "building": "CHD",
+  "floor": "03",
+  "rooms": 35,
+  "corridors": 5,
+  "doors": 29,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 51
+ },
+ {
+  "building": "CHD",
+  "floor": "04",
+  "rooms": 31,
+  "corridors": 2,
+  "doors": 24,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 34
+ },
+ {
+  "building": "CHD",
+  "floor": "05",
+  "rooms": 31,
+  "corridors": 2,
+  "doors": 28,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 43
+ },
+ {
+  "building": "CHD",
+  "floor": "06",
+  "rooms": 38,
+  "corridors": 3,
+  "doors": 29,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 38
+ },
+ {
+  "building": "CHD",
+  "floor": "07",
+  "rooms": 4,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CHD",
+  "floor": "08RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CHD",
+  "floor": "B1",
+  "rooms": 27,
+  "corridors": 3,
+  "doors": 23,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 40
+ },
+ {
+  "building": "CHE",
+  "floor": "01",
+  "rooms": 27,
+  "corridors": 1,
+  "doors": 24,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 48
+ },
+ {
+  "building": "CHE",
+  "floor": "02",
+  "rooms": 34,
+  "corridors": 3,
+  "doors": 26,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 50
+ },
+ {
+  "building": "CHE",
+  "floor": "03",
+  "rooms": 7,
+  "corridors": 2,
+  "doors": 4,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 11
+ },
+ {
+  "building": "CHE",
+  "floor": "04RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CHE",
+  "floor": "B1",
+  "rooms": 21,
+  "corridors": 2,
+  "doors": 16,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 34
+ },
+ {
+  "building": "CHF",
+  "floor": "01",
+  "rooms": 39,
+  "corridors": 5,
+  "doors": 29,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 54
+ },
+ {
+  "building": "CHF",
+  "floor": "02",
+  "rooms": 31,
+  "corridors": 4,
+  "doors": 24,
+  "room_to_room": 2,
+  "inferred_doors": 1,
+  "wall_crossings": 40
+ },
+ {
+  "building": "CHF",
+  "floor": "03",
+  "rooms": 4,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CHF",
+  "floor": "B1",
+  "rooms": 28,
+  "corridors": 3,
+  "doors": 24,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 45
+ },
+ {
+  "building": "CHG",
+  "floor": "01",
+  "rooms": 51,
+  "corridors": 4,
+  "doors": 26,
+  "room_to_room": 21,
+  "inferred_doors": 0,
+  "wall_crossings": 39
+ },
+ {
+  "building": "CHG",
+  "floor": "02",
+  "rooms": 23,
+  "corridors": 3,
+  "doors": 13,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 52
+ },
+ {
+  "building": "CHG",
+  "floor": "03RF",
+  "rooms": 7,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CHG",
+  "floor": "B1",
+  "rooms": 16,
+  "corridors": 2,
+  "doors": 9,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 14
+ },
+ {
+  "building": "CR",
+  "floor": "01",
+  "rooms": 77,
+  "corridors": 12,
+  "doors": 54,
+  "room_to_room": 11,
+  "inferred_doors": 0,
+  "wall_crossings": 82
+ },
+ {
+  "building": "CR",
+  "floor": "02",
+  "rooms": 145,
+  "corridors": 4,
+  "doors": 107,
+  "room_to_room": 33,
+  "inferred_doors": 1,
+  "wall_crossings": 127
+ },
+ {
+  "building": "CR",
+  "floor": "03",
+  "rooms": 144,
+  "corridors": 4,
+  "doors": 107,
+  "room_to_room": 33,
+  "inferred_doors": 0,
+  "wall_crossings": 141
+ },
+ {
+  "building": "CR",
+  "floor": "04",
+  "rooms": 145,
+  "corridors": 4,
+  "doors": 107,
+  "room_to_room": 34,
+  "inferred_doors": 0,
+  "wall_crossings": 141
+ },
+ {
+  "building": "CR",
+  "floor": "05",
+  "rooms": 144,
+  "corridors": 4,
+  "doors": 107,
+  "room_to_room": 33,
+  "inferred_doors": 0,
+  "wall_crossings": 141
+ },
+ {
+  "building": "CR",
+  "floor": "06",
+  "rooms": 144,
+  "corridors": 4,
+  "doors": 107,
+  "room_to_room": 33,
+  "inferred_doors": 0,
+  "wall_crossings": 137
+ },
+ {
+  "building": "CR",
+  "floor": "07",
+  "rooms": 144,
+  "corridors": 4,
+  "doors": 107,
+  "room_to_room": 33,
+  "inferred_doors": 0,
+  "wall_crossings": 137
+ },
+ {
+  "building": "CR",
+  "floor": "08",
+  "rooms": 75,
+  "corridors": 2,
+  "doors": 53,
+  "room_to_room": 20,
+  "inferred_doors": 0,
+  "wall_crossings": 64
+ },
+ {
+  "building": "CR",
+  "floor": "09",
+  "rooms": 74,
+  "corridors": 2,
+  "doors": 53,
+  "room_to_room": 18,
+  "inferred_doors": 0,
+  "wall_crossings": 67
+ },
+ {
+  "building": "CR",
+  "floor": "10",
+  "rooms": 73,
+  "corridors": 2,
+  "doors": 53,
+  "room_to_room": 18,
+  "inferred_doors": 0,
+  "wall_crossings": 65
+ },
+ {
+  "building": "CR",
+  "floor": "11",
+  "rooms": 67,
+  "corridors": 3,
+  "doors": 48,
+  "room_to_room": 16,
+  "inferred_doors": 0,
+  "wall_crossings": 61
+ },
+ {
+  "building": "CR",
+  "floor": "12",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "CR",
+  "floor": "B1",
+  "rooms": 12,
+  "corridors": 2,
+  "doors": 9,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 13
+ },
+ {
+  "building": "CSB",
+  "floor": "01",
+  "rooms": 291,
+  "corridors": 26,
+  "doors": 196,
+  "room_to_room": 69,
+  "inferred_doors": 0,
+  "wall_crossings": 271
+ },
+ {
+  "building": "CSSH",
+  "floor": "01",
+  "rooms": 7,
+  "corridors": 1,
+  "doors": 2,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 3
+ },
+ {
+  "building": "DC",
+  "floor": "01",
+  "rooms": 59,
+  "corridors": 7,
+  "doors": 29,
+  "room_to_room": 22,
+  "inferred_doors": 1,
+  "wall_crossings": 51
+ },
+ {
+  "building": "DC",
+  "floor": "02",
+  "rooms": 15,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 15,
+  "inferred_doors": 0,
+  "wall_crossings": 1
+ },
+ {
+  "building": "DC",
+  "floor": "03RF",
+  "rooms": 2,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "DC",
+  "floor": "B1",
+  "rooms": 112,
+  "corridors": 12,
+  "doors": 72,
+  "room_to_room": 27,
+  "inferred_doors": 1,
+  "wall_crossings": 127
+ },
+ {
+  "building": "DTC",
+  "floor": "01",
+  "rooms": 66,
+  "corridors": 14,
+  "doors": 40,
+  "room_to_room": 12,
+  "inferred_doors": 0,
+  "wall_crossings": 100
+ },
+ {
+  "building": "DTC",
+  "floor": "02",
+  "rooms": 68,
+  "corridors": 13,
+  "doors": 52,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 140
+ },
+ {
+  "building": "DTC",
+  "floor": "03",
+  "rooms": 48,
+  "corridors": 5,
+  "doors": 33,
+  "room_to_room": 10,
+  "inferred_doors": 0,
+  "wall_crossings": 67
+ },
+ {
+  "building": "DTC",
+  "floor": "04",
+  "rooms": 48,
+  "corridors": 4,
+  "doors": 31,
+  "room_to_room": 13,
+  "inferred_doors": 0,
+  "wall_crossings": 61
+ },
+ {
+  "building": "DTC",
+  "floor": "05",
+  "rooms": 56,
+  "corridors": 8,
+  "doors": 43,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 107
+ },
+ {
+  "building": "DTC",
+  "floor": "06",
+  "rooms": 59,
+  "corridors": 9,
+  "doors": 49,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 115
+ },
+ {
+  "building": "DTC",
+  "floor": "B1",
+  "rooms": 19,
+  "corridors": 4,
+  "doors": 9,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 45
+ },
+ {
+  "building": "EDC",
+  "floor": "01",
+  "rooms": 55,
+  "corridors": 11,
+  "doors": 38,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 122
+ },
+ {
+  "building": "EDC",
+  "floor": "02",
+  "rooms": 75,
+  "corridors": 6,
+  "doors": 61,
+  "room_to_room": 8,
+  "inferred_doors": 0,
+  "wall_crossings": 115
+ },
+ {
+  "building": "EDC",
+  "floor": "03",
+  "rooms": 44,
+  "corridors": 3,
+  "doors": 21,
+  "room_to_room": 20,
+  "inferred_doors": 0,
+  "wall_crossings": 47
+ },
+ {
+  "building": "EDC",
+  "floor": "04",
+  "rooms": 6,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "EDC",
+  "floor": "B1",
+  "rooms": 65,
+  "corridors": 9,
+  "doors": 46,
+  "room_to_room": 10,
+  "inferred_doors": 0,
+  "wall_crossings": 90
+ },
+ {
+  "building": "EDT",
+  "floor": "01",
+  "rooms": 27,
+  "corridors": 9,
+  "doors": 18,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 58
+ },
+ {
+  "building": "EDT",
+  "floor": "02",
+  "rooms": 25,
+  "corridors": 2,
+  "doors": 8,
+  "room_to_room": 13,
+  "inferred_doors": 2,
+  "wall_crossings": 29
+ },
+ {
+  "building": "EDT",
+  "floor": "03",
+  "rooms": 28,
+  "corridors": 5,
+  "doors": 22,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 41
+ },
+ {
+  "building": "EDT",
+  "floor": "04",
+  "rooms": 36,
+  "corridors": 4,
+  "doors": 29,
+  "room_to_room": 2,
+  "inferred_doors": 1,
+  "wall_crossings": 44
+ },
+ {
+  "building": "EDT",
+  "floor": "05",
+  "rooms": 36,
+  "corridors": 2,
+  "doors": 33,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 41
+ },
+ {
+  "building": "EDT",
+  "floor": "06",
+  "rooms": 35,
+  "corridors": 2,
+  "doors": 32,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 40
+ },
+ {
+  "building": "EDT",
+  "floor": "07",
+  "rooms": 36,
+  "corridors": 2,
+  "doors": 32,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 40
+ },
+ {
+  "building": "EDT",
+  "floor": "08",
+  "rooms": 34,
+  "corridors": 3,
+  "doors": 31,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 42
+ },
+ {
+  "building": "EDT",
+  "floor": "09",
+  "rooms": 37,
+  "corridors": 3,
+  "doors": 34,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 41
+ },
+ {
+  "building": "EDT",
+  "floor": "10",
+  "rooms": 36,
+  "corridors": 2,
+  "doors": 34,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 41
+ },
+ {
+  "building": "EDT",
+  "floor": "11",
+  "rooms": 30,
+  "corridors": 4,
+  "doors": 24,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 33
+ },
+ {
+  "building": "EDT",
+  "floor": "12",
+  "rooms": 34,
+  "corridors": 4,
+  "doors": 23,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 28
+ },
+ {
+  "building": "EDT",
+  "floor": "13",
+  "rooms": 26,
+  "corridors": 2,
+  "doors": 10,
+  "room_to_room": 14,
+  "inferred_doors": 0,
+  "wall_crossings": 12
+ },
+ {
+  "building": "EDT",
+  "floor": "14",
+  "rooms": 39,
+  "corridors": 4,
+  "doors": 35,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 53
+ },
+ {
+  "building": "EDT",
+  "floor": "15",
+  "rooms": 5,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "EDT",
+  "floor": "16",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "EDT",
+  "floor": "B1",
+  "rooms": 36,
+  "corridors": 3,
+  "doors": 18,
+  "room_to_room": 15,
+  "inferred_doors": 0,
+  "wall_crossings": 32
+ },
+ {
+  "building": "EEEL",
+  "floor": "01",
+  "rooms": 79,
+  "corridors": 22,
+  "doors": 46,
+  "room_to_room": 8,
+  "inferred_doors": 3,
+  "wall_crossings": 123
+ },
+ {
+  "building": "EEEL",
+  "floor": "02",
+  "rooms": 69,
+  "corridors": 16,
+  "doors": 49,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 101
+ },
+ {
+  "building": "EEEL",
+  "floor": "03",
+  "rooms": 60,
+  "corridors": 15,
+  "doors": 45,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 110
+ },
+ {
+  "building": "EEEL",
+  "floor": "04",
+  "rooms": 116,
+  "corridors": 26,
+  "doors": 85,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 138
+ },
+ {
+  "building": "EEEL",
+  "floor": "05",
+  "rooms": 64,
+  "corridors": 13,
+  "doors": 48,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 97
+ },
+ {
+  "building": "EEEL",
+  "floor": "06",
+  "rooms": 20,
+  "corridors": 2,
+  "doors": 9,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 19
+ },
+ {
+  "building": "EEEL",
+  "floor": "B1",
+  "rooms": 49,
+  "corridors": 8,
+  "doors": 35,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 49
+ },
+ {
+  "building": "ENA",
+  "floor": "01",
+  "rooms": 40,
+  "corridors": 4,
+  "doors": 26,
+  "room_to_room": 10,
+  "inferred_doors": 0,
+  "wall_crossings": 43
+ },
+ {
+  "building": "ENA",
+  "floor": "02",
+  "rooms": 52,
+  "corridors": 5,
+  "doors": 40,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 67
+ },
+ {
+  "building": "ENA",
+  "floor": "03",
+  "rooms": 20,
+  "corridors": 2,
+  "doors": 10,
+  "room_to_room": 6,
+  "inferred_doors": 2,
+  "wall_crossings": 21
+ },
+ {
+  "building": "ENA",
+  "floor": "04",
+  "rooms": 5,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ENA",
+  "floor": "B1",
+  "rooms": 35,
+  "corridors": 3,
+  "doors": 25,
+  "room_to_room": 7,
+  "inferred_doors": 0,
+  "wall_crossings": 37
+ },
+ {
+  "building": "ENB",
+  "floor": "01",
+  "rooms": 23,
+  "corridors": 2,
+  "doors": 17,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 28
+ },
+ {
+  "building": "ENB",
+  "floor": "02",
+  "rooms": 32,
+  "corridors": 2,
+  "doors": 26,
+  "room_to_room": 3,
+  "inferred_doors": 1,
+  "wall_crossings": 40
+ },
+ {
+  "building": "ENB",
+  "floor": "03",
+  "rooms": 17,
+  "corridors": 1,
+  "doors": 14,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 25
+ },
+ {
+  "building": "ENB",
+  "floor": "04",
+  "rooms": 11,
+  "corridors": 1,
+  "doors": 8,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 9
+ },
+ {
+  "building": "ENB",
+  "floor": "05",
+  "rooms": 6,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ENB",
+  "floor": "B1",
+  "rooms": 22,
+  "corridors": 3,
+  "doors": 13,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 23
+ },
+ {
+  "building": "ENC",
+  "floor": "01",
+  "rooms": 45,
+  "corridors": 3,
+  "doors": 28,
+  "room_to_room": 11,
+  "inferred_doors": 1,
+  "wall_crossings": 41
+ },
+ {
+  "building": "ENC",
+  "floor": "02",
+  "rooms": 20,
+  "corridors": 2,
+  "doors": 10,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 18
+ },
+ {
+  "building": "ENC",
+  "floor": "03",
+  "rooms": 17,
+  "corridors": 1,
+  "doors": 11,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 12
+ },
+ {
+  "building": "ENC",
+  "floor": "04",
+  "rooms": 13,
+  "corridors": 1,
+  "doors": 11,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 12
+ },
+ {
+  "building": "ENC",
+  "floor": "05RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ENC",
+  "floor": "B1",
+  "rooms": 53,
+  "corridors": 5,
+  "doors": 23,
+  "room_to_room": 25,
+  "inferred_doors": 0,
+  "wall_crossings": 29
+ },
+ {
+  "building": "ENC",
+  "floor": "B2",
+  "rooms": 38,
+  "corridors": 4,
+  "doors": 21,
+  "room_to_room": 13,
+  "inferred_doors": 0,
+  "wall_crossings": 35
+ },
+ {
+  "building": "END",
+  "floor": "01",
+  "rooms": 20,
+  "corridors": 1,
+  "doors": 13,
+  "room_to_room": 4,
+  "inferred_doors": 2,
+  "wall_crossings": 21
+ },
+ {
+  "building": "END",
+  "floor": "02",
+  "rooms": 29,
+  "corridors": 3,
+  "doors": 25,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 37
+ },
+ {
+  "building": "END",
+  "floor": "03",
+  "rooms": 17,
+  "corridors": 2,
+  "doors": 12,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 20
+ },
+ {
+  "building": "END",
+  "floor": "04RF",
+  "rooms": 2,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "END",
+  "floor": "B1",
+  "rooms": 17,
+  "corridors": 2,
+  "doors": 9,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 15
+ },
+ {
+  "building": "ENE",
+  "floor": "01",
+  "rooms": 32,
+  "corridors": 6,
+  "doors": 17,
+  "room_to_room": 9,
+  "inferred_doors": 0,
+  "wall_crossings": 27
+ },
+ {
+  "building": "ENE",
+  "floor": "02",
+  "rooms": 58,
+  "corridors": 10,
+  "doors": 45,
+  "room_to_room": 2,
+  "inferred_doors": 1,
+  "wall_crossings": 68
+ },
+ {
+  "building": "ENE",
+  "floor": "03",
+  "rooms": 30,
+  "corridors": 3,
+  "doors": 15,
+  "room_to_room": 11,
+  "inferred_doors": 1,
+  "wall_crossings": 19
+ },
+ {
+  "building": "ENE",
+  "floor": "04",
+  "rooms": 3,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ENE",
+  "floor": "B1",
+  "rooms": 34,
+  "corridors": 5,
+  "doors": 19,
+  "room_to_room": 9,
+  "inferred_doors": 1,
+  "wall_crossings": 25
+ },
+ {
+  "building": "ENE",
+  "floor": "B2",
+  "rooms": 6,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ENF",
+  "floor": "01",
+  "rooms": 20,
+  "corridors": 3,
+  "doors": 14,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 18
+ },
+ {
+  "building": "ENF",
+  "floor": "02",
+  "rooms": 62,
+  "corridors": 7,
+  "doors": 50,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 62
+ },
+ {
+  "building": "ENF",
+  "floor": "03",
+  "rooms": 32,
+  "corridors": 2,
+  "doors": 25,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 28
+ },
+ {
+  "building": "ENF",
+  "floor": "04",
+  "rooms": 12,
+  "corridors": 2,
+  "doors": 6,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 12
+ },
+ {
+  "building": "ENF",
+  "floor": "05RF",
+  "rooms": 1,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ENF",
+  "floor": "B1",
+  "rooms": 23,
+  "corridors": 2,
+  "doors": 12,
+  "room_to_room": 9,
+  "inferred_doors": 0,
+  "wall_crossings": 15
+ },
+ {
+  "building": "ENG",
+  "floor": "01",
+  "rooms": 31,
+  "corridors": 5,
+  "doors": 23,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 47
+ },
+ {
+  "building": "ENG",
+  "floor": "02",
+  "rooms": 31,
+  "corridors": 6,
+  "doors": 20,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 42
+ },
+ {
+  "building": "ENG",
+  "floor": "03",
+  "rooms": 36,
+  "corridors": 9,
+  "doors": 27,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 50
+ },
+ {
+  "building": "ENG",
+  "floor": "04",
+  "rooms": 35,
+  "corridors": 8,
+  "doors": 27,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 49
+ },
+ {
+  "building": "ENG",
+  "floor": "05",
+  "rooms": 6,
+  "corridors": 2,
+  "doors": 4,
+  "room_to_room": 0,
+  "inferred_doors": 0,
+  "wall_crossings": 11
+ },
+ {
+  "building": "ENG",
+  "floor": "B1",
+  "rooms": 55,
+  "corridors": 10,
+  "doors": 30,
+  "room_to_room": 15,
+  "inferred_doors": 0,
+  "wall_crossings": 53
+ },
+ {
+  "building": "ERR",
+  "floor": "01",
+  "rooms": 104,
+  "corridors": 8,
+  "doors": 77,
+  "room_to_room": 19,
+  "inferred_doors": 0,
+  "wall_crossings": 98
+ },
+ {
+  "building": "ERR",
+  "floor": "02",
+  "rooms": 111,
+  "corridors": 6,
+  "doors": 85,
+  "room_to_room": 20,
+  "inferred_doors": 0,
+  "wall_crossings": 87
+ },
+ {
+  "building": "ERR",
+  "floor": "B1",
+  "rooms": 12,
+  "corridors": 1,
+  "doors": 10,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 12
+ },
+ {
+  "building": "ES",
+  "floor": "01",
+  "rooms": 74,
+  "corridors": 8,
+  "doors": 54,
+  "room_to_room": 12,
+  "inferred_doors": 0,
+  "wall_crossings": 88
+ },
+ {
+  "building": "ES",
+  "floor": "02",
+  "rooms": 74,
+  "corridors": 6,
+  "doors": 64,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 101
+ },
+ {
+  "building": "ES",
+  "floor": "03",
+  "rooms": 59,
+  "corridors": 5,
+  "doors": 48,
+  "room_to_room": 6,
+  "inferred_doors": 0,
+  "wall_crossings": 72
+ },
+ {
+  "building": "ES",
+  "floor": "04",
+  "rooms": 53,
+  "corridors": 5,
+  "doors": 46,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 73
+ },
+ {
+  "building": "ES",
+  "floor": "05",
+  "rooms": 63,
+  "corridors": 8,
+  "doors": 54,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 75
+ },
+ {
+  "building": "ES",
+  "floor": "06",
+  "rooms": 63,
+  "corridors": 7,
+  "doors": 43,
+  "room_to_room": 13,
+  "inferred_doors": 0,
+  "wall_crossings": 66
+ },
+ {
+  "building": "ES",
+  "floor": "07",
+  "rooms": 52,
+  "corridors": 5,
+  "doors": 42,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 59
+ },
+ {
+  "building": "ES",
+  "floor": "08",
+  "rooms": 60,
+  "corridors": 6,
+  "doors": 51,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 65
+ },
+ {
+  "building": "ES",
+  "floor": "09",
+  "rooms": 62,
+  "corridors": 9,
+  "doors": 48,
+  "room_to_room": 5,
+  "inferred_doors": 0,
+  "wall_crossings": 77
+ },
+ {
+  "building": "ES",
+  "floor": "10",
+  "rooms": 64,
+  "corridors": 11,
+  "doors": 51,
+  "room_to_room": 2,
+  "inferred_doors": 0,
+  "wall_crossings": 98
+ },
+ {
+  "building": "ES",
+  "floor": "11",
+  "rooms": 9,
+  "corridors": 1,
+  "doors": 7,
+  "room_to_room": 1,
+  "inferred_doors": 0,
+  "wall_crossings": 10
+ },
+ {
+  "building": "ES",
+  "floor": "12",
+  "rooms": 4,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 4,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ES",
+  "floor": "13RF",
+  "rooms": 3,
+  "corridors": 0,
+  "doors": 0,
+  "room_to_room": 3,
+  "inferred_doors": 0,
+  "wall_crossings": 0
+ },
+ {
+  "building": "ES",
+  "floor": "B1",
+  "rooms": 63,
+  "corridors": 8,
+  "doors": 42,
+  "room_to_room": 13,
+  "inferred_doors": 0,
+  "wall_crossings": 67
+ }
+]

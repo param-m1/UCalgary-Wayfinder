@@ -64,7 +64,8 @@ from shapely.ops import unary_union
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import floor_graph as fg
 from georeference import (BUILDING_CODE_ALIASES, apply_transform, fetch_footprints,
-                          floor_outline, rings_to_polygon, solve_building, to_wgs84)
+                          floor_level, floor_outline, page_polygons,
+                          rings_to_polygon, solve_building, to_wgs84)
 import outdoor
 
 PROJECT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -82,33 +83,9 @@ STAIR_FLOOR_PENALTY_M = 20.0
 STAIR_NUMBER_RE = re.compile(r"^\d+Y", re.IGNORECASE)
 
 
-def floor_sort_key(floor_id):
-    """B2 < B1 < G1 < 01 < 01M < 02 ... so 'consecutive floors' means something."""
-    s = str(floor_id).upper()
-    if s.startswith("B"):
-        try:
-            return -int(s[1:] or 1)
-        except ValueError:
-            return -1
-    if s.startswith("G"):
-        return 0
-    if s.startswith("P"):          # parkade levels sit below ground
-        try:
-            return -10 - int(s[1:] or 1)
-        except ValueError:
-            return -10
-    digits = ""
-    for ch in s:
-        if ch.isdigit():
-            digits += ch
-        else:
-            break
-    if digits:
-        base = int(digits)
-        rest = s[len(digits):]
-        # 01M (mezzanine) sits just above 01; 08RF is the top of 08
-        return base + (0.5 if rest.startswith("M") else 0.0)
-    return 999
+# Floor ordering lives in georeference.py, which needs it to walk a building's
+# floors when stacking them on each other.
+floor_sort_key = floor_level
 
 
 def load_building(code):
@@ -260,7 +237,9 @@ def main():
             print(f"[skip] {code}: no floor had usable room geometry")
             continue
 
-        rotation, ref_floor, fits = solve_building(floors, footprint)
+        rotation, ref_floor, fits = solve_building(
+            floors, footprint,
+            floor_polys={fid: page_polygons(data[fid]) for fid, _ in floors})
         floor_order = sorted([fid for fid, _ in floors], key=floor_sort_key)
         floor_rooms = {}
 

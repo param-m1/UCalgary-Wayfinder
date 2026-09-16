@@ -97,6 +97,7 @@ import os
 import urllib.parse
 import urllib.request
 
+import numpy as np
 import pyproj
 from shapely.affinity import rotate, scale as shapely_scale, translate
 from shapely.geometry import Polygon, shape
@@ -221,6 +222,58 @@ def floor_outline(floor_data, simplify_pt=1.5):
     return simplified if not simplified.is_empty else merged
 
 
+def page_polygons(floor_data):
+    """Every room on a floor as a polygon, still in page coordinates."""
+    polys = []
+    for room in floor_data.get("rooms", []):
+        ring = room.get("ring")
+        if not ring or len(ring) < 4:
+            continue
+        try:
+            g = Polygon(ring)
+            if not g.is_valid:
+                g = g.buffer(0)
+        except Exception:
+            continue
+        if g.is_empty or g.geom_type != "Polygon":
+            continue
+        polys.append(g)
+    return polys
+
+
+def floor_level(floor_id):
+    """
+    A number for a floor id, so that 'the floor above' means something.
+
+    B2 < B1 < G1 < 01 < 01M < 02. Parkade levels sit below the basements, and
+    a mezzanine ('01M') half a level above the floor it is named after.
+    """
+    s = str(floor_id).upper()
+    if s.startswith("B"):
+        try:
+            return -int(s[1:] or 1)
+        except ValueError:
+            return -1
+    if s.startswith("G"):
+        return 0
+    if s.startswith("P"):
+        try:
+            return -10 - int(s[1:] or 1)
+        except ValueError:
+            return -10
+    digits = ""
+    for ch in s:
+        if ch.isdigit():
+            digits += ch
+        else:
+            break
+    if digits:
+        base = int(digits)
+        rest = s[len(digits):]
+        return base + (0.5 if rest.startswith("M") else 0.0)
+    return 999
+
+
 def _iou(a, b):
     """
     Intersection over union.
@@ -295,10 +348,12 @@ def fit_floor(outline, footprint, rotations, scale_hint=None):
     return params
 
 
-def solve_building(floors, footprint):
+def solve_building(floors, footprint, floor_polys=None):
     """
     floors: list of (floor_id, outline_polygon)
-    Returns (rotation, {floor_id: params}).
+    floor_polys: optional {floor_id: [page-coordinate room polygons]}, which
+        turns on the core-alignment pass that stacks floors on each other.
+    Returns (rotation, reference_floor_id, {floor_id: params}).
 
     The building's rotation comes from whichever floor fits best on a full
     rotation sweep - normally a big lower floor. Every floor is then refit with
@@ -370,6 +425,17 @@ def solve_building(floors, footprint):
             results[floor_id] = rescued
 
     _align_floors_to_each_other(floors, results)
+    if floor_polys:
+        align_floors_by_cores(floor_polys, results)
+        # the fit scores were measured before the floors were stacked on each
+        # other, so refresh them against the footprint
+        outlines = dict(floors)
+        for floor_id, params in results.items():
+            if "core_alignment" not in params or floor_id not in outlines:
+                continue
+            placed = apply_transform(outlines[floor_id], params)
+            params["score"] = _iou(placed, footprint)
+            params["coverage"] = _coverage(placed, footprint)
     return rotation, ref_floor, results
 
 
@@ -410,8 +476,13 @@ def _align_floors_to_each_other(floors, results):
     anchor_id = max(results, key=lambda f: results[f].get("score", 0))
     anchor = apply_transform(outlines[anchor_id], results[anchor_id])
 
+    # Scored on IoU, not coverage, for the reason set out in _iou: coverage is
+    # flat once the smaller floor is anywhere inside the bigger one, so it
+    # cannot tell a floor that is lined up from one sitting three metres off.
+    # Social Sciences showed exactly that - every floor "aligned", and every
+    # stair core on floors 5 and 6 still 3.5 m apart.
     def search(placed, centre, span, step):
-        best = (_coverage(translate(placed, xoff=centre[0], yoff=centre[1]), anchor),
+        best = (_iou(translate(placed, xoff=centre[0], yoff=centre[1]), anchor),
                 centre[0], centre[1])
         count = int(span / step)
         for i in range(-count, count + 1):
@@ -419,7 +490,7 @@ def _align_floors_to_each_other(floors, results):
                 dx, dy = centre[0] + i * step, centre[1] + j * step
                 if abs(dx) > MAX_FLOOR_NUDGE_M or abs(dy) > MAX_FLOOR_NUDGE_M:
                     continue
-                score = _coverage(translate(placed, xoff=dx, yoff=dy), anchor)
+                score = _iou(translate(placed, xoff=dx, yoff=dy), anchor)
                 if score > best[0]:
                     best = (score, dx, dy)
         return best
@@ -439,3 +510,179 @@ def _align_floors_to_each_other(floors, results):
             params["real_center"] = (rx + dx, ry + dy)
         params["floor_nudge_m"] = [round(dx, 2), round(dy, 2)]
         params["alignment_with_anchor"] = round(best[0], 3)
+
+
+# --- lining floors up on the cores that run through them --------------------
+#
+# A small space that appears in the same place on two adjacent floors is a
+# stair, a lift shaft, a duct or a stacked washroom - the parts of a building
+# that genuinely repeat floor to floor. Matching those is a far sharper signal
+# for "these two floors are lined up" than comparing outlines, because there
+# are dozens of them scattered across the plan instead of one blobby shape.
+#
+# Small enough to be a core rather than a room, big enough not to be a stray
+# fragment of geometry:
+CORE_MAX_AREA_M2 = 90.0
+CORE_MIN_AREA_M2 = 1.0
+
+# A core counts as matched when its centre lands this close to a core of
+# similar size on the other floor.
+CORE_MATCH_RADIUS_M = 1.2
+CORE_AREA_RATIO = 1.35
+
+# How far the fit is allowed to be corrected. The scale range is wide because
+# the errors being corrected are real and large: MacEwan Hall's floor 1 fits
+# the footprint at 0.2024 m/pt and its floor 3 at 0.2723, a 35% disagreement
+# between two floors of the same building, because each sheet is drawn to fill
+# its own page and each was fitted to the whole footprint independently.
+CORE_SCALE_RANGE = 0.22
+CORE_SCALE_STEP = 0.02
+CORE_MAX_SHIFT_M = 8.0
+CORE_VOTE_BIN_M = 1.0
+
+# Below this many matched cores the answer is noise, and the floor keeps the
+# placement its own footprint fit gave it. Better an unlinked floor than a
+# floor slid several metres on the strength of three coincidences.
+CORE_MIN_MATCHES = 5
+
+
+def _cores(polys):
+    """Centres and areas of the small spaces on a placed floor."""
+    pts, areas = [], []
+    for p in polys:
+        if CORE_MIN_AREA_M2 <= p.area <= CORE_MAX_AREA_M2:
+            c = p.centroid
+            pts.append((c.x, c.y))
+            areas.append(p.area)
+    return (np.asarray(pts, dtype=float).reshape(-1, 2),
+            np.asarray(areas, dtype=float))
+
+
+def _core_matches(ref_pts, ref_areas, pts, areas, centre, factor, dx, dy):
+    """How many of this floor's cores land on a similar core of the reference."""
+    if len(pts) == 0 or len(ref_pts) == 0:
+        return 0
+    moved = (pts - centre) * factor + centre + np.array([dx, dy])
+    dist = np.hypot(moved[:, 0, None] - ref_pts[None, :, 0],
+                    moved[:, 1, None] - ref_pts[None, :, 1])
+    mine = (areas * factor * factor)[:, None]
+    theirs = ref_areas[None, :]
+    ratio = np.maximum(mine, theirs) / np.maximum(np.minimum(mine, theirs), 1e-6)
+    return int(((dist <= CORE_MATCH_RADIUS_M) & (ratio <= CORE_AREA_RATIO))
+               .any(axis=1).sum())
+
+
+def _best_core_alignment(ref_polys, polys):
+    """
+    Find the scale factor and shift that best stacks this floor on the reference.
+
+    Rather than search the (scale, dx, dy) space directly - tens of thousands of
+    combinations per floor - each candidate scale lets every possible pairing of
+    a core here with a core there *vote* for the shift that would bring them
+    together. The shift the most pairs agree on is the answer, and only the few
+    leading candidates are then scored properly. That turns the search from a
+    grid sweep into two matrix operations per scale.
+
+    Returns (matches, factor, dx, dy, centre) or None.
+    """
+    ref_pts, ref_areas = _cores(ref_polys)
+    pts, areas = _cores(polys)
+    if len(ref_pts) < CORE_MIN_MATCHES or len(pts) < CORE_MIN_MATCHES:
+        return None
+    centre = pts.mean(axis=0)
+
+    base = _core_matches(ref_pts, ref_areas, pts, areas, centre, 1.0, 0.0, 0.0)
+    best = (base, 1.0, 0.0, 0.0)
+
+    steps = int(CORE_SCALE_RANGE / CORE_SCALE_STEP)
+    for i in range(-steps, steps + 1):
+        factor = 1.0 + i * CORE_SCALE_STEP
+        moved = (pts - centre) * factor + centre
+        mine = (areas * factor * factor)[:, None]
+        theirs = ref_areas[None, :]
+        ratio = np.maximum(mine, theirs) / np.maximum(np.minimum(mine, theirs), 1e-6)
+        ox = ref_pts[None, :, 0] - moved[:, None, 0]
+        oy = ref_pts[None, :, 1] - moved[:, None, 1]
+        usable = ((ratio <= CORE_AREA_RATIO)
+                  & (np.abs(ox) <= CORE_MAX_SHIFT_M)
+                  & (np.abs(oy) <= CORE_MAX_SHIFT_M))
+        if not usable.any():
+            continue
+        bins = np.stack([np.round(ox[usable] / CORE_VOTE_BIN_M),
+                         np.round(oy[usable] / CORE_VOTE_BIN_M)], axis=1)
+        keys, counts = np.unique(bins, axis=0, return_counts=True)
+        for idx in np.argsort(counts)[-3:]:
+            dx, dy = keys[idx] * CORE_VOTE_BIN_M
+            score = _core_matches(ref_pts, ref_areas, pts, areas, centre,
+                                  factor, dx, dy)
+            if score > best[0]:
+                best = (score, factor, dx, dy)
+
+    # settle the answer at a finer step than the vote bins
+    score, factor, dx, dy = best
+    for fi in np.arange(factor - CORE_SCALE_STEP, factor + CORE_SCALE_STEP + 1e-9,
+                        CORE_SCALE_STEP / 4):
+        for ddx in np.arange(dx - CORE_VOTE_BIN_M, dx + CORE_VOTE_BIN_M + 1e-9, 0.25):
+            for ddy in np.arange(dy - CORE_VOTE_BIN_M, dy + CORE_VOTE_BIN_M + 1e-9, 0.25):
+                v = _core_matches(ref_pts, ref_areas, pts, areas, centre,
+                                  fi, ddx, ddy)
+                if v > score:
+                    score, factor, dx, dy = v, float(fi), float(ddx), float(ddy)
+
+    if score < CORE_MIN_MATCHES or score <= base:
+        return None
+    return score, factor, dx, dy, centre
+
+
+def align_floors_by_cores(floor_polys, results):
+    """
+    Stack a building's floors on each other, working outward from the anchor.
+
+    The footprint fit places every floor against the *building*, which is the
+    only thing tied to the real world, but it has no way of knowing that floor 6
+    sits directly on floor 5. Measured across the campus that left 164 pairs of
+    adjacent floors with no vertical link at all - no stair core on one floor
+    overlapped its own continuation on the next - which is why a quarter of all
+    rooms could not be reached from their own building's entrance.
+
+    So after the footprint fit, each floor is re-scaled and shifted to stack on
+    the floor next to it, and the chain runs outward from the building's
+    best-fitting floor, which keeps its footprint fit and therefore its tie to
+    the real world.
+
+    `floor_polys` is {floor_id: [page-coordinate room polygons]}. Records what
+    it did in each floor's params under "core_alignment".
+    """
+    usable = [fid for fid in results if floor_polys.get(fid)]
+    if len(usable) < 2:
+        return
+    anchor_id = max(usable, key=lambda f: results[f].get("score", 0))
+    order = sorted(usable, key=floor_level)
+    at = order.index(anchor_id)
+
+    # outward from the anchor in both directions, so each floor is aligned to a
+    # neighbour that has already been aligned itself
+    sequence = ([(order[i], order[i - 1]) for i in range(at + 1, len(order))]
+                + [(order[i], order[i + 1]) for i in range(at - 1, -1, -1)])
+
+    placed = {anchor_id: [apply_transform(p, results[anchor_id])
+                          for p in floor_polys[anchor_id]]}
+
+    for floor_id, reference in sequence:
+        params = results[floor_id]
+        mine = [apply_transform(p, params) for p in floor_polys[floor_id]]
+        found = _best_core_alignment(placed.get(reference, []), mine)
+        if found:
+            matches, factor, dx, dy, (cx, cy) = found
+            rx, ry = params["real_center"]
+            params["scale"] *= factor
+            params["real_center"] = ((rx - cx) * factor + cx + dx,
+                                     (ry - cy) * factor + cy + dy)
+            params["core_alignment"] = {
+                "reference_floor": reference,
+                "scale_factor": round(factor, 3),
+                "shift_m": [round(float(dx), 2), round(float(dy), 2)],
+                "cores_matched": int(matches),
+            }
+            mine = [apply_transform(p, params) for p in floor_polys[floor_id]]
+        placed[floor_id] = mine

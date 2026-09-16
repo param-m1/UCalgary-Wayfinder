@@ -36,7 +36,8 @@ from shapely.ops import unary_union
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import floor_graph as fg
 from georeference import (BUILDING_CODE_ALIASES, apply_transform, fetch_footprints,
-                          floor_outline, rings_to_polygon, solve_building)
+                          floor_outline, page_polygons, rings_to_polygon,
+                          solve_building)
 
 PROJECT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FLOOR_DIR = os.path.join(PROJECT, "data", "floors")
@@ -143,7 +144,9 @@ def main():
                 data[d["floor_id"]] = d
         if not floors:
             continue
-        rotation, ref, fits = solve_building(floors, footprint)
+        rotation, ref, fits = solve_building(
+            floors, footprint,
+            floor_polys={fid: page_polygons(data[fid]) for fid in data})
 
         # the floor with the most rooms is the most informative to look at
         floor_id = max(data, key=lambda f: len(data[f].get("rooms", [])))

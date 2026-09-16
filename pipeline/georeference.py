@@ -369,4 +369,73 @@ def solve_building(floors, footprint):
             rescued["scale_source"] = f"building consensus (anchor {anchor_id})"
             results[floor_id] = rescued
 
+    _align_floors_to_each_other(floors, results)
     return rotation, ref_floor, results
+
+
+# How far a floor may be nudged to line up with the rest of its building.
+# Searched coarse-then-fine: a flat grid at the fine step over this range would
+# be thousands of polygon intersections per floor, and a range narrow enough to
+# be affordable that way wasn't wide enough - CCIT's floors are more than 6 m
+# out from each other and every one of them pinned against a +/-6 m bound.
+MAX_FLOOR_NUDGE_M = 16.0
+NUDGE_COARSE_STEP_M = 2.0
+NUDGE_FINE_RANGE_M = 2.5
+NUDGE_FINE_STEP_M = 0.5
+
+
+def _align_floors_to_each_other(floors, results):
+    """
+    Nudge each floor so it lines up with the rest of its building.
+
+    Fitting every floor independently against the building footprint gets each
+    one roughly right, but leaves them a couple of metres out *relative to each
+    other* - and that matters more than it sounds. Vertical links are found by
+    looking for small spaces (stair and lift cores, a few metres across) that
+    occupy the same place on consecutive floors. A 2-3 m relative offset drops
+    their overlap below the matching threshold and no link is made at all.
+
+    The symptom was stark: CCIT came out with **zero** vertical links and all
+    seven floors as separate islands, so six of them were unreachable from the
+    campus network no matter how good each floor's own fit was.
+
+    So after the footprint fit, each floor is shifted by up to a few metres to
+    maximise overlap with the building's best-fitting floor. Rotation and scale
+    are left alone - those come from the footprint fit, which is the thing
+    anchored to the real world; only the relative offset is being cleaned up.
+    """
+    if len(floors) < 2:
+        return
+    outlines = dict(floors)
+    anchor_id = max(results, key=lambda f: results[f].get("score", 0))
+    anchor = apply_transform(outlines[anchor_id], results[anchor_id])
+
+    def search(placed, centre, span, step):
+        best = (_coverage(translate(placed, xoff=centre[0], yoff=centre[1]), anchor),
+                centre[0], centre[1])
+        count = int(span / step)
+        for i in range(-count, count + 1):
+            for j in range(-count, count + 1):
+                dx, dy = centre[0] + i * step, centre[1] + j * step
+                if abs(dx) > MAX_FLOOR_NUDGE_M or abs(dy) > MAX_FLOOR_NUDGE_M:
+                    continue
+                score = _coverage(translate(placed, xoff=dx, yoff=dy), anchor)
+                if score > best[0]:
+                    best = (score, dx, dy)
+        return best
+
+    for floor_id, outline in floors:
+        if floor_id == anchor_id:
+            results[floor_id]["floor_nudge_m"] = [0.0, 0.0]
+            continue
+        params = results[floor_id]
+        placed = apply_transform(outline, params)
+        coarse = search(placed, (0.0, 0.0), MAX_FLOOR_NUDGE_M, NUDGE_COARSE_STEP_M)
+        best = search(placed, (coarse[1], coarse[2]),
+                      NUDGE_FINE_RANGE_M, NUDGE_FINE_STEP_M)
+        _, dx, dy = best
+        if dx or dy:
+            rx, ry = params["real_center"]
+            params["real_center"] = (rx + dx, ry + dy)
+        params["floor_nudge_m"] = [round(dx, 2), round(dy, 2)]
+        params["alignment_with_anchor"] = round(best[0], 3)

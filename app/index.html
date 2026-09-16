@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UCalgary Wayfinder</title>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"
+        onerror="loadFallback()"></script>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet"
+      onerror="this.href='https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css'" />
+<script>
+  // unpkg first, jsDelivr if a network or blocker eats it
+  function loadFallback() {
+    var s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js";
+    s.onload = function () { window.startApp && window.startApp(); };
+    document.head.appendChild(s);
+  }
+</script>
+<style>
+  :root {
+    --panel: rgba(255,255,255,0.97);
+    --text: #15181d;
+    --muted: #666d79;
+    --line: #dfe3ea;
+    --accent: #c8102e;          /* UCalgary red */
+    --corridor: #7f8a9b;
+    --route: #c8102e;
+    --stairs: #b45309;
+    --outdoor: #0f766e;
+  }
+  html, body, #map { height: 100%; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+         color: var(--text); }
+
+  #panel {
+    position: absolute; top: 12px; left: 12px; z-index: 2;
+    width: 340px; max-width: calc(100vw - 24px); max-height: calc(100vh - 24px);
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: 0 6px 26px rgba(0,0,0,0.17);
+  }
+  header { padding: 12px 14px 10px; border-bottom: 1px solid var(--line); }
+  h1 { font-size: 15px; margin: 0; font-weight: 650; letter-spacing: -0.01em; }
+  h1 span { color: var(--accent); }
+  .sub { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .body { padding: 12px 14px; overflow-y: auto; }
+
+  .field { position: relative; margin-bottom: 9px; }
+  .field label { display:block; font-size:11px; font-weight:600; color:var(--muted);
+                 margin-bottom:3px; text-transform:uppercase; letter-spacing:.04em; }
+  .field input { width:100%; box-sizing:border-box; padding:8px 9px; font-size:13.5px;
+                 font-family:inherit; border:1px solid var(--line); border-radius:7px; }
+  .field input:focus { outline:2px solid var(--accent); outline-offset:-1px; border-color:transparent; }
+
+  .suggest { position:absolute; top:100%; left:0; right:0; z-index:5; background:#fff;
+             border:1px solid var(--line); border-radius:7px; margin-top:3px;
+             max-height:230px; overflow-y:auto; box-shadow:0 6px 18px rgba(0,0,0,.14); }
+  .suggest div { padding:7px 9px; font-size:13px; cursor:pointer; border-bottom:1px solid #f2f4f7; }
+  .suggest div:last-child { border-bottom:0; }
+  .suggest div:hover, .suggest div.active { background:#f5f7fa; }
+  .suggest .code { font-weight:650; }
+  .suggest .meta { color:var(--muted); font-size:11.5px; }
+
+  .row { display:flex; gap:7px; align-items:center; }
+  button { font-family:inherit; font-size:13px; font-weight:600; padding:8px 12px;
+           border-radius:7px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; flex:1; }
+  button:hover { filter:brightness(.97); }
+
+  .toggle { display:flex; align-items:center; gap:7px; margin-top:10px; font-size:12.5px; }
+  .toggle input { width:15px; height:15px; }
+
+  #status { font-size:12px; color:var(--muted); margin-top:9px; }
+
+  .legs { margin-top:12px; border-top:1px solid var(--line); padding-top:10px; }
+  .summary { font-size:13.5px; font-weight:650; margin-bottom:8px; }
+  .summary .dim { font-weight:400; color:var(--muted); }
+  .leg { display:flex; gap:9px; padding:7px 6px; border-radius:7px; cursor:pointer;
+         font-size:12.5px; line-height:1.35; }
+  .leg:hover { background:#f5f7fa; }
+  .leg.current { background:#fdf2f4; }
+  .dot { flex:0 0 auto; width:9px; height:9px; border-radius:50%; margin-top:4px; background:var(--route); }
+  .dot.stairs { background:var(--stairs); }
+  .dot.outdoor { background:var(--outdoor); }
+  .leg .where { color:var(--muted); font-size:11.5px; }
+  .note { font-size:11px; color:var(--muted); margin-top:9px; line-height:1.45; }
+
+  .controls { position:absolute; bottom:14px; left:12px; z-index:2; background:var(--panel);
+              border:1px solid var(--line); border-radius:10px; padding:8px 10px;
+              box-shadow:0 4px 16px rgba(0,0,0,.14); display:flex; gap:8px; align-items:center; }
+  .controls label { font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; }
+  .controls select { padding:5px 7px; border:1px solid var(--line); border-radius:6px;
+                     font-size:13px; font-family:inherit; background:#fff; }
+  @media (max-width: 560px) { #panel { width:auto; right:12px; } .controls { right:12px; } }
+</style>
+</head>
+<body>
+
+<div id="panel">
+  <header>
+    <h1>UCalgary <span>Wayfinder</span></h1>
+    <div class="sub">Room to room, through real doors and corridors</div>
+  </header>
+  <div class="body">
+    <div class="field">
+      <label for="fromInput">From</label>
+      <input id="fromInput" type="text" placeholder="e.g. BI 186, or a building name" autocomplete="off" />
+      <div class="suggest" id="fromSuggest" hidden></div>
+    </div>
+    <div class="field">
+      <label for="toInput">To</label>
+      <input id="toInput" type="text" placeholder="e.g. AD 120" autocomplete="off" />
+      <div class="suggest" id="toSuggest" hidden></div>
+    </div>
+    <div class="row">
+      <button class="primary" id="goBtn">Get directions</button>
+      <button id="swapBtn" title="Swap">&#8645;</button>
+      <button id="clearBtn" title="Clear">&#10005;</button>
+    </div>
+    <label class="toggle"><input type="checkbox" id="stepFree" /> Step-free route (no stairs)</label>
+    <div id="status">Loading&hellip;</div>
+    <div class="legs" id="legs" hidden></div>
+  </div>
+</div>
+
+<div class="controls">
+  <label for="buildingSelect">Building</label>
+  <select id="buildingSelect"></select>
+  <label for="floorSelect">Floor</label>
+  <select id="floorSelect"></select>
+</div>
+
+<div id="map"></div>
+
+<script>
+const GRAPH_URL = "../out/navigation-graph.json";
+const FLOOR_URL = (b, f) => `../out/floors/${b}-${f}.geojson`;
+
+// Stairs and outdoor steps are the two things a step-free route must avoid.
+// vertical_unknown is excluded too: we can't tell lifts from stairs in this
+// data, so step-free routing refuses anything unproven rather than risk
+// sending someone to a staircase.
+const STEP_KINDS = new Set(["stairs", "vertical_unknown", "steps"]);
+
+function floorSortKey(f) {
+  const s = String(f).toUpperCase();
+  if (s.startsWith("B")) return -(parseInt(s.slice(1), 10) || 1);
+  if (s.startsWith("G")) return 0;
+  if (s.startsWith("P")) return -10 - (parseInt(s.slice(1), 10) || 1);
+  const m = s.match(/^(\d+)(.*)$/);
+  if (m) return parseInt(m[1], 10) + (m[2].startsWith("M") ? 0.5 : 0);
+  return 999;
+}
+function floorName(f) {
+  const s = String(f).toUpperCase();
+  if (s.startsWith("B")) return `Basement ${s.slice(1) || ""}`.trim();
+  if (s === "G1") return "Ground";
+  if (s.startsWith("P")) return `Parkade ${s.slice(1)}`;
+  const m = s.match(/^(\d+)(.*)$/);
+  if (m) {
+    const n = parseInt(m[1], 10);
+    if (m[2].startsWith("M")) return `Floor ${n} mezzanine`;
+    if (m[2].startsWith("RF")) return `Floor ${n} (roof)`;
+    return `Floor ${n}`;
+  }
+  return f;
+}
+
+/* ---- Dijkstra with a binary heap. The campus graph is tens of thousands of
+   nodes, which routes in a few milliseconds in the browser, so no backend. --- */
+class MinHeap {
+  constructor() { this.items = []; }
+  get size() { return this.items.length; }
+  push(node, priority) {
+    this.items.push({ node, priority });
+    let i = this.items.length - 1;
+    while (i > 0) {
+      const p = (i - 1) >> 1;
+      if (this.items[p].priority <= this.items[i].priority) break;
+      [this.items[p], this.items[i]] = [this.items[i], this.items[p]];
+      i = p;
+    }
+  }
+  pop() {
+    const top = this.items[0], last = this.items.pop();
+    if (this.items.length) {
+      this.items[0] = last;
+      let i = 0;
+      for (;;) {
+        const l = 2 * i + 1, r = l + 1; let s = i;
+        if (l < this.items.length && this.items[l].priority < this.items[s].priority) s = l;
+        if (r < this.items.length && this.items[r].priority < this.items[s].priority) s = r;
+        if (s === i) break;
+        [this.items[s], this.items[i]] = [this.items[i], this.items[s]];
+        i = s;
+      }
+    }
+    return top.node;
+  }
+}
+
+function route(adjacency, start, goal, stepFree) {
+  const dist = new Map([[start, 0]]), prev = new Map(), done = new Set();
+  const heap = new MinHeap(); heap.push(start, 0);
+  while (heap.size) {
+    const cur = heap.pop();
+    if (done.has(cur)) continue;
+    done.add(cur);
+    if (cur === goal) break;
+    for (const link of adjacency.get(cur) || []) {
+      if (stepFree && STEP_KINDS.has(link.edge.kind)) continue;
+      if (done.has(link.to)) continue;
+      const cand = dist.get(cur) + link.weight;
+      if (!dist.has(link.to) || cand < dist.get(link.to)) {
+        dist.set(link.to, cand);
+        prev.set(link.to, { from: cur, edge: link.edge });
+        heap.push(link.to, cand);
+      }
+    }
+  }
+  if (!dist.has(goal)) return null;
+  const steps = []; let cur = goal;
+  while (cur !== start) {
+    const s = prev.get(cur);
+    steps.unshift({ from: s.from, to: cur, edge: s.edge });
+    cur = s.from;
+  }
+  return { steps, distance: dist.get(goal) };
+}
+
+function startApp() {
+const map = new maplibregl.Map({
+  container: "map",
+  style: {
+    version: 8,
+    glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+    sources: {
+      osm: { type: "raster", tileSize: 256,
+             tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                     "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                     "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+             attribution: "&copy; OpenStreetMap contributors" } },
+    layers: [{ id: "basemap", type: "raster", source: "osm" }],
+  },
+  center: [-114.131, 51.079], zoom: 15,
+});
+map.addControl(new maplibregl.NavigationControl(), "top-right");
+// the map can be built before the container has its final size, which leaves
+// the canvas stuck at a fraction of the viewport
+new ResizeObserver(() => map.resize()).observe(document.getElementById("map"));
+
+const empty = { type: "FeatureCollection", features: [] };
+const state = { nodes: new Map(), adjacency: new Map(), edges: [], buildings: {},
+                search: [], from: null, to: null, result: null,
+                building: null, floor: null, floorCache: new Map() };
+
+function nodePos(id) { const n = state.nodes.get(id); return n ? [n.lon, n.lat] : null; }
+function edgeCoords(e) { return e.g || [nodePos(e.a), nodePos(e.b)]; }
+
+async function loadFloor(building, floor) {
+  const key = `${building}-${floor}`;
+  if (state.floorCache.has(key)) return state.floorCache.get(key);
+  try {
+    const r = await fetch(FLOOR_URL(building, floor));
+    const data = r.ok ? await r.json() : empty;
+    state.floorCache.set(key, data);
+    return data;
+  } catch { return empty; }
+}
+
+async function showFloor(building, floor, fit) {
+  if (!state.buildings[building]) return;
+  state.building = building;
+  const floors = state.buildings[building].floors;
+  state.floor = floors.includes(floor) ? floor : floors[0];
+  document.getElementById("buildingSelect").value = building;
+  populateFloors(building);
+  document.getElementById("floorSelect").value = state.floor;
+
+  const plan = await loadFloor(state.building, state.floor);
+  map.getSource("rooms").setData(plan);
+  refresh();
+  if (fit) fitTo(plan);
+}
+
+function routeFeatures() {
+  if (!state.result) return empty;
+  return { type: "FeatureCollection", features: state.result.steps.map(s => {
+    const a = state.nodes.get(s.from), b = state.nodes.get(s.to);
+    const here = a.building === state.building && a.floor === state.floor
+              && b.building === state.building && b.floor === state.floor;
+    const coords = edgeCoords(s.edge).filter(Boolean);
+    return { type: "Feature",
+             properties: { kind: s.edge.kind, here: here ? 1 : 0 },
+             geometry: { type: "LineString", coordinates: coords.length > 1 ? coords : [[0,0],[0,0]] } };
+  })};
+}
+function endpointFeatures() {
+  const f = [];
+  for (const [n, role] of [[state.from, "from"], [state.to, "to"]]) {
+    if (!n) continue;
+    f.push({ type: "Feature", properties: { role },
+             geometry: { type: "Point", coordinates: [n.lon, n.lat] } });
+  }
+  return { type: "FeatureCollection", features: f };
+}
+function refresh() {
+  map.getSource("route").setData(routeFeatures());
+  map.getSource("ends").setData(endpointFeatures());
+}
+function fitTo(collection) {
+  const b = new maplibregl.LngLatBounds(); let any = false;
+  for (const f of collection.features) {
+    const cs = f.geometry.type === "Point" ? [f.geometry.coordinates]
+             : f.geometry.type === "Polygon" ? f.geometry.coordinates[0]
+             : f.geometry.coordinates;
+    for (const c of cs) { if (c && isFinite(c[0])) { b.extend(c); any = true; } }
+  }
+  if (any) map.fitBounds(b, { padding: { top: 60, bottom: 60, left: 370, right: 60 }, maxZoom: 20 });
+}
+
+/* ---- search ---- */
+function buildSearch() {
+  const out = [];
+  for (const n of state.nodes.values()) {
+    if (n.kind === "room" && n.room) {
+      const b = state.buildings[n.building];
+      out.push({ node: n, primary: `${n.building} ${n.room}`,
+                 secondary: `${b ? b.name : n.building} · ${floorName(n.floor)}`,
+                 hay: `${n.building} ${n.room} ${b ? b.name : ""}`.toLowerCase() });
+    }
+  }
+  for (const [code, info] of Object.entries(state.buildings)) {
+    const entrance = [...state.nodes.values()].find(n => n.building === code && n.entrance);
+    if (entrance) out.push({ node: entrance, primary: info.name,
+                             secondary: `${code} · entrance`,
+                             hay: `${code} ${info.name}`.toLowerCase() });
+  }
+  out.sort((a, b) => a.primary.localeCompare(b.primary, undefined, { numeric: true }));
+  state.search = out;
+}
+function search(q, limit = 25) {
+  const s = q.trim().toLowerCase();
+  if (!s) return [];
+  const terms = s.split(/\s+/);
+  const hits = [];
+  for (const e of state.search) {
+    if (!terms.every(t => e.hay.includes(t))) continue;
+    hits.push({ e, exact: e.primary.toLowerCase() === s ? 0 : 1,
+                starts: e.hay.startsWith(s) ? 0 : 1, len: e.primary.length });
+  }
+  hits.sort((a, b) => a.exact - b.exact || a.starts - b.starts || a.len - b.len);
+  return hits.slice(0, limit).map(h => h.e);
+}
+function wireSearch(inputId, boxId, onPick) {
+  const input = document.getElementById(inputId), box = document.getElementById(boxId);
+  let active = -1;
+  const close = () => { box.hidden = true; active = -1; };
+  function render(results) {
+    if (!results.length) return close();
+    box.innerHTML = "";
+    results.forEach((e, i) => {
+      const row = document.createElement("div");
+      if (i === active) row.className = "active";
+      row.innerHTML = `<div class="code">${e.primary}</div><div class="meta">${e.secondary}</div>`;
+      row.addEventListener("mousedown", ev => { ev.preventDefault(); pick(e); });
+      box.appendChild(row);
+    });
+    box.hidden = false;
+  }
+  function pick(e) {
+    input.value = e.primary; onPick(e.node); close();
+    if (inputId === "fromInput" && !state.to) document.getElementById("toInput").focus();
+  }
+  input.addEventListener("input", () => { active = -1; render(search(input.value)); });
+  input.addEventListener("focus", () => { if (input.value) render(search(input.value)); });
+  input.addEventListener("blur", () => setTimeout(close, 120));
+  input.addEventListener("keydown", e => {
+    const rows = [...box.children];
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!rows.length) return;
+      active = e.key === "ArrowDown" ? Math.min(active + 1, rows.length - 1) : Math.max(active - 1, 0);
+      rows.forEach((r, i) => r.className = i === active ? "active" : "");
+      rows[active].scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter") {
+      const r = search(input.value);
+      if (r.length) { e.preventDefault(); pick(r[Math.max(active, 0)]); }
+    } else if (e.key === "Escape") close();
+  });
+}
+
+/* ---- directions ---- */
+function legsOf(result) {
+  const legs = []; let cur = null;
+  for (const s of result.steps) {
+    const a = state.nodes.get(s.from), b = state.nodes.get(s.to);
+    const kind = s.edge.kind;
+    if (kind === "stairs" || kind === "vertical_unknown") {
+      if (cur) { legs.push(cur); cur = null; }
+      legs.push({ type: "stairs", building: b.building, floor: b.floor,
+                  text: `Take the ${kind === "stairs" ? "stairs" : "stairs or lift"} to ${floorName(b.floor)}`,
+                  where: state.buildings[b.building]?.name || b.building });
+      continue;
+    }
+    if (kind === "outdoor" || kind === "steps" || kind === "entrance_link") {
+      const prev = legs[legs.length - 1];
+      if (cur) { legs.push(cur); cur = null; }
+      if (prev && prev.type === "outdoor") { prev.distance += s.edge.w; continue; }
+      legs.push({ type: "outdoor", building: b.building, floor: b.floor, distance: s.edge.w });
+      continue;
+    }
+    if (!cur || cur.building !== a.building || cur.floor !== a.floor) {
+      if (cur) legs.push(cur);
+      cur = { type: "walk", building: a.building, floor: a.floor, distance: 0,
+              where: `${state.buildings[a.building]?.name || a.building} · ${floorName(a.floor)}` };
+    }
+    cur.distance += s.edge.w;
+  }
+  if (cur) legs.push(cur);
+  for (const l of legs) {
+    if (l.type === "walk") l.text = `Walk ${Math.round(l.distance)} m`;
+    if (l.type === "outdoor") {
+      l.text = `Walk outside to ${state.buildings[l.building]?.name || l.building}`;
+      l.where = `${Math.round(l.distance)} m`;
+    }
+  }
+  return legs;
+}
+function renderLegs(result) {
+  const box = document.getElementById("legs");
+  if (!result) { box.hidden = true; return; }
+  const legs = legsOf(result);
+  const mins = Math.max(1, Math.round(result.distance / 78));   // ~1.3 m/s
+  let html = `<div class="summary">${Math.round(result.distance)} m
+              <span class="dim">· about ${mins} min</span></div>`;
+  html += `<div class="leg" data-b="${state.from.building}" data-f="${state.from.floor}">
+             <div class="dot"></div><div><strong>Start:</strong> ${describe(state.from)}</div></div>`;
+  for (const l of legs) {
+    html += `<div class="leg" data-b="${l.building}" data-f="${l.floor}">
+               <div class="dot ${l.type}"></div>
+               <div>${l.text}<div class="where">${l.where || ""}</div></div></div>`;
+  }
+  html += `<div class="leg" data-b="${state.to.building}" data-f="${state.to.floor}">
+             <div class="dot"></div><div><strong>Arrive:</strong> ${describe(state.to)}</div></div>`;
+  if (legs.some(l => l.type === "stairs")) {
+    html += `<div class="note">Lifts can't be told apart from stairs in the source floor
+             plans, so a vertical link is only called "stairs" when the room numbering says
+             so. Step-free routing avoids every vertical link it can't verify.</div>`;
+  }
+  html += `<div class="note">Indoor paths follow corridor centrelines from the floor plans and
+           enter rooms at the wall they share with the corridor. Outdoor legs use
+           OpenStreetMap footpaths.</div>`;
+  box.innerHTML = html; box.hidden = false;
+  box.querySelectorAll(".leg").forEach(el => el.addEventListener("click", () => {
+    showFloor(el.dataset.b, el.dataset.f);
+    box.querySelectorAll(".leg").forEach(x => x.classList.remove("current"));
+    el.classList.add("current");
+  }));
+}
+function describe(n) {
+  const b = state.buildings[n.building];
+  const name = b ? b.name : n.building;
+  return n.room ? `${n.building} ${n.room} — ${name}, ${floorName(n.floor)}` : `${name} (${n.building})`;
+}
+function describeShort(n) {
+  return n.room ? `${n.building} ${n.room}` : (state.buildings[n.building]?.name || n.building);
+}
+
+/* ---- controls ---- */
+function populateBuildings() {
+  const sel = document.getElementById("buildingSelect");
+  sel.innerHTML = "";
+  for (const code of Object.keys(state.buildings)
+        .sort((a, b) => state.buildings[a].name.localeCompare(state.buildings[b].name))) {
+    const o = document.createElement("option");
+    o.value = code; o.textContent = `${state.buildings[code].name} (${code})`;
+    sel.appendChild(o);
+  }
+}
+function populateFloors(code) {
+  const sel = document.getElementById("floorSelect");
+  sel.innerHTML = "";
+  for (const f of (state.buildings[code]?.floors || []).slice().sort((a,b)=>floorSortKey(a)-floorSortKey(b))) {
+    const o = document.createElement("option");
+    o.value = f; o.textContent = floorName(f);
+    sel.appendChild(o);
+  }
+}
+
+function resolveEnds() {
+  for (const [role, id] of [["from", "fromInput"], ["to", "toInput"]]) {
+    const text = document.getElementById(id).value.trim();
+    if (!text) { state[role] = null; continue; }
+    if (state[role] && describeShort(state[role]) === text) continue;
+    const r = search(text, 1);
+    state[role] = r.length ? r[0].node : null;
+    if (state[role]) document.getElementById(id).value = describeShort(state[role]);
+  }
+}
+function go() {
+  const status = document.getElementById("status");
+  resolveEnds();
+  if (!state.from || !state.to) {
+    status.textContent = `Couldn't find ${!state.from ? "a start" : "a destination"} — try "BI 186" or a building name.`;
+    state.result = null; renderLegs(null); refresh(); return;
+  }
+  const stepFree = document.getElementById("stepFree").checked;
+  const t0 = performance.now();
+  const result = route(state.adjacency, state.from.id, state.to.id, stepFree);
+  if (!result) {
+    state.result = null; renderLegs(null); refresh();
+    status.textContent = stepFree
+      ? "No step-free route found. There may be one by lift — lifts aren't identifiable in this data."
+      : "No route found between those two places.";
+    return;
+  }
+  state.result = result;
+  status.textContent = `Route found in ${Math.round(performance.now() - t0)} ms.`;
+  renderLegs(result);
+  showFloor(state.from.building, state.from.floor).then(() => fitTo(routeFeatures()));
+}
+
+map.on("load", async () => {
+  const status = document.getElementById("status");
+  let data;
+  try {
+    const r = await fetch(GRAPH_URL);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    data = await r.json();
+  } catch (e) {
+    status.textContent = `Could not load the graph (${e.message}). Serve this folder over HTTP — "python3 serve.py" from the project root.`;
+    return;
+  }
+  state.buildings = data.buildings; state.edges = data.edges;
+  for (const n of data.nodes) state.nodes.set(n.id, n);
+  for (const e of data.edges) {
+    if (!state.adjacency.has(e.a)) state.adjacency.set(e.a, []);
+    if (!state.adjacency.has(e.b)) state.adjacency.set(e.b, []);
+    state.adjacency.get(e.a).push({ to: e.b, weight: e.w, edge: e });
+    state.adjacency.get(e.b).push({ to: e.a, weight: e.w, edge: e });
+  }
+  buildSearch();
+
+  map.addSource("rooms", { type: "geojson", data: empty });
+  map.addSource("route", { type: "geojson", data: empty });
+  map.addSource("ends", { type: "geojson", data: empty });
+
+  map.addLayer({ id: "room-fill", type: "fill", source: "rooms",
+    paint: { "fill-color": ["case", ["get", "corridor"], "#dbeafe", "#f7f7f8"],
+             "fill-opacity": 0.85 } });
+  map.addLayer({ id: "room-line", type: "line", source: "rooms",
+    paint: { "line-color": ["case", ["get", "corridor"], "#6aa3dd", "#b9bfc9"], "line-width": 0.8 } });
+  map.addLayer({ id: "room-label", type: "symbol", source: "rooms", minzoom: 18,
+    layout: { "text-field": ["get", "room"], "text-font": ["Open Sans Regular"], "text-size": 10 },
+    paint: { "text-color": "#39404d", "text-halo-color": "#fff", "text-halo-width": 1.2 } });
+
+  map.addLayer({ id: "route-halo", type: "line", source: "route",
+    layout: { "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": "#fff", "line-opacity": 0.9,
+             "line-width": ["case", ["==", ["get", "here"], 1], 9, 5] } });
+  map.addLayer({ id: "route-line", type: "line", source: "route",
+    filter: ["!=", ["get", "kind"], "outdoor"],
+    layout: { "line-cap": "round", "line-join": "round" },
+    paint: { "line-color": ["match", ["get", "kind"],
+                            "stairs", "#b45309", "vertical_unknown", "#b45309",
+                            "steps", "#b45309", "entrance_link", "#0f766e", "#c8102e"],
+             "line-width": ["case", ["==", ["get", "here"], 1], 5, 2.5],
+             "line-opacity": ["case", ["==", ["get", "here"], 1], 1, 0.4] } });
+  map.addLayer({ id: "route-outdoor", type: "line", source: "route",
+    filter: ["==", ["get", "kind"], "outdoor"],
+    paint: { "line-color": "#0f766e", "line-width": 3.5, "line-opacity": 0.85,
+             "line-dasharray": [2, 1.4] } });
+  map.addLayer({ id: "ends-dot", type: "circle", source: "ends",
+    paint: { "circle-radius": 7,
+             "circle-color": ["match", ["get", "role"], "from", "#16a34a", "#c8102e"],
+             "circle-stroke-color": "#fff", "circle-stroke-width": 2.5 } });
+
+  populateBuildings();
+  const first = document.getElementById("buildingSelect").value;
+  await showFloor(first, state.buildings[first].floors[0], true);
+
+  const rooms = data.nodes.filter(n => n.room).length;
+  status.textContent = `${Object.keys(state.buildings).length} buildings · `
+    + `${rooms.toLocaleString()} rooms · ${data.edges.length.toLocaleString()} edges`;
+
+  wireSearch("fromInput", "fromSuggest", n => { state.from = n; if (state.to) go(); else { refresh(); showFloor(n.building, n.floor, true); } });
+  wireSearch("toInput", "toSuggest", n => { state.to = n; if (state.from) go(); else { refresh(); showFloor(n.building, n.floor, true); } });
+
+  document.getElementById("goBtn").addEventListener("click", go);
+  document.getElementById("stepFree").addEventListener("change", () => { if (state.from && state.to) go(); });
+  document.getElementById("swapBtn").addEventListener("click", () => {
+    const f = document.getElementById("fromInput"), t = document.getElementById("toInput");
+    [f.value, t.value] = [t.value, f.value];
+    [state.from, state.to] = [state.to, state.from];
+    if (state.result) go(); else refresh();
+  });
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    state.from = state.to = state.result = null;
+    document.getElementById("fromInput").value = "";
+    document.getElementById("toInput").value = "";
+    renderLegs(null); refresh();
+  });
+  document.getElementById("buildingSelect").addEventListener("change", e =>
+    showFloor(e.target.value, state.buildings[e.target.value].floors[0], true));
+  document.getElementById("floorSelect").addEventListener("change", async e => {
+    state.floor = e.target.value;
+    map.getSource("rooms").setData(await loadFloor(state.building, state.floor));
+    refresh();
+  });
+});
+}
+if (typeof maplibregl !== "undefined") startApp(); else window.startApp = startApp;
+</script>
+</body>
+</html>

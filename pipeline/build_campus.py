@@ -52,6 +52,7 @@ import gzip
 import json
 import math
 import os
+import re
 import shutil
 import sys
 import time
@@ -75,7 +76,10 @@ VERTICAL_MAX_AREA_M2 = 90.0
 VERTICAL_MIN_IOU = 0.55
 STAIR_FLOOR_PENALTY_M = 20.0
 
-STAIR_SUFFIX = "Y"
+# Stairs are numbered with a Y suffix in this dataset; confirmed by the
+# existence of "YUP"/"YDN" numbers, the CAD convention for a stair's up and
+# down runs.
+STAIR_NUMBER_RE = re.compile(r"^\d+Y", re.IGNORECASE)
 
 
 def floor_sort_key(floor_id):
@@ -160,10 +164,11 @@ def link_floors(graph, code, floor_rooms, floor_order):
                 if not (graph.has_node(node_a) and graph.has_node(node_b)):
                     continue
 
-                num = (num_a or num_b or "").upper()
-                is_stair = num.rstrip("0123456789").startswith(STAIR_SUFFIX) or \
-                    (num and num[len(num.rstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ")):].startswith(STAIR_SUFFIX))
-                kind = "stairs" if is_stair else "vertical_unknown"
+                num = (num_a or num_b or "").upper().replace(" ", "")
+                # digits then a Y suffix: "142Y", "142YDN". The first attempt
+                # at this used rstrip() and matched almost nothing - only 200
+                # of 4,031 links came out as stairs.
+                kind = "stairs" if STAIR_NUMBER_RE.match(num) else "vertical_unknown"
 
                 ax, ay = graph.nodes[node_a]["pos"]
                 bx, by = graph.nodes[node_b]["pos"]
@@ -183,27 +188,47 @@ def pick_entrance(graph, code, footprint, floor_rooms, floor_order):
     """
     Where the building meets the outdoors.
 
-    No exterior-door data exists, so the entrance stands in as the corridor
-    node on the lowest real floor that sits closest to the building's outer
-    wall. That at least puts the indoor/outdoor handover at the edge of the
-    building rather than in the middle of it.
+    No exterior-door data exists, so the entrance stands in as a corridor node
+    near the building's outer wall on its lowest well-connected floor. That
+    puts the indoor/outdoor handover at the edge of the building rather than
+    in the middle of it.
+
+    The important subtlety is **which part of the building it attaches to**.
+    The first version took the lowest floor outright, and that quietly broke
+    cross-building routing: Biological Sciences' lowest floor is a 22-node
+    basement fragment that isn't connected to the other 2,934 nodes of the
+    building, so the entire building hung off the campus network by a stub and
+    only 7 of its 1,036 rooms could be reached from outside. Campus-wide that
+    left 13% of rooms routable.
+
+    So the entrance is chosen from the building's **largest connected
+    component** - the part that actually is the building - and only then by
+    floor and proximity to the outer wall.
     """
+    own = [n for n, d in graph.nodes(data=True) if d.get("building") == code]
+    if not own:
+        return None
+    sub = graph.subgraph(own)
+    try:
+        main = max(nx.connected_components(sub), key=len)
+    except ValueError:
+        return None
+
     boundary = footprint.exterior if footprint.geom_type == "Polygon" else \
         unary_union([g.exterior for g in footprint.geoms])
-    ground = None
-    for fid in floor_order:
-        if floor_rooms.get(fid):
-            ground = fid
-            break
-    if ground is None:
-        return None
-    candidates = [(n, d) for n, d in graph.nodes(data=True)
-                  if d.get("floor") == ground and d.get("kind") == "corridor"]
+
+    candidates = [(n, graph.nodes[n]) for n in main
+                  if graph.nodes[n].get("kind") == "corridor"]
     if not candidates:
-        candidates = [(n, d) for n, d in graph.nodes(data=True) if d.get("floor") == ground]
+        candidates = [(n, graph.nodes[n]) for n in main]
     if not candidates:
         return None
-    return min(candidates, key=lambda nd: boundary.distance(Point(nd[1]["pos"])))[0]
+
+    # prefer the lowest floor that is actually part of the main component
+    floors_present = {d.get("floor") for _, d in candidates}
+    lowest = min(floors_present, key=floor_sort_key)
+    on_lowest = [(n, d) for n, d in candidates if d.get("floor") == lowest] or candidates
+    return min(on_lowest, key=lambda nd: boundary.distance(Point(nd[1]["pos"])))[0]
 
 
 def main():
@@ -242,6 +267,7 @@ def main():
             circulation = unary_union(
                 [poly for node_id, poly in spaces
                  if graph.nodes[node_id].get("is_corridor")]) if spaces else None
+            write_floor_geojson(code, floor_id, spaces, graph)
             for bad in fg.edges_through_walls(graph, spaces, circulation):
                 wall_crossings.append({"building": code, "floor": floor_id, **bad})
             stats["wall_crossings"] = sum(
@@ -293,6 +319,38 @@ def main():
     export(campus, buildings, fit_report, floor_report, vertical_report,
            outdoor_stats, wall_crossings)
     print(f"\ndone in {time.time()-started:.0f}s")
+
+
+def write_floor_geojson(code, floor_id, spaces, graph):
+    """
+    One GeoJSON per floor, in plain WGS84.
+
+    Two reasons this exists rather than everything living in the one graph
+    file: the viewer only ever draws one floor at a time, so shipping every
+    room polygon on campus up front would be wasteful; and a GeoJSON per floor
+    can be dragged straight into QGIS to see what a stage actually produced.
+    """
+    features = []
+    for node_id, poly in spaces:
+        data = graph.nodes[node_id]
+        try:
+            ring = [[round(c, 6) for c in to_wgs84(x, y)]
+                    for x, y in poly.exterior.coords]
+        except Exception:
+            continue
+        features.append({
+            "type": "Feature",
+            "properties": {
+                "node": node_id,
+                "room": data.get("number"),
+                "corridor": bool(data.get("is_corridor")),
+            },
+            "geometry": {"type": "Polygon", "coordinates": [ring]},
+        })
+    target_dir = os.path.join(OUT_DIR, "floors")
+    os.makedirs(target_dir, exist_ok=True)
+    with open(os.path.join(target_dir, f"{code}-{floor_id}.geojson"), "w") as fh:
+        json.dump({"type": "FeatureCollection", "features": features}, fh)
 
 
 def export(graph, buildings, fit_report, floor_report, vertical_report,

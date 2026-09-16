@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"node": "CHC|05RF|r0", "room": "515RF", "corridor": false}, "geometry": {"type": "Polygon", "coordinates": [[[-114.129045, 51.076703], [-114.129067, 51.076728], [-114.129179, 51.076688], [-114.129156, 51.076663], [-114.129045, 51.076703]]]}}]}

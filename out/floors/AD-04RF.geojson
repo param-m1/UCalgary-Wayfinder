@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"node": "AD|04RF|r0", "room": "400RS", "corridor": false}, "geometry": {"type": "Polygon", "coordinates": [[[-114.127205, 51.078401], [-114.126864, 51.078026], [-114.127001, 51.077976], [-114.127318, 51.078324], [-114.127314, 51.078325], [-114.127339, 51.078352], [-114.127205, 51.078401]]]}}]}

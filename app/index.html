@@ -408,7 +408,10 @@ function legsOf(result) {
       const prev = legs[legs.length - 1];
       if (cur) { legs.push(cur); cur = null; }
       if (prev && prev.type === "outdoor") { prev.distance += s.edge.w; continue; }
-      legs.push({ type: "outdoor", building: b.building, floor: b.floor, distance: s.edge.w });
+      // Outdoor nodes belong to no building, so naming the leg after the node
+      // we happen to step onto gives "Walk outside to null". Name it after the
+      // building the walk actually ends at instead.
+      legs.push({ type: "outdoor", building: null, floor: null, distance: s.edge.w });
       continue;
     }
     if (!cur || cur.building !== a.building || cur.floor !== a.floor) {
@@ -419,6 +422,16 @@ function legsOf(result) {
     cur.distance += s.edge.w;
   }
   if (cur) legs.push(cur);
+
+  // fill in each outdoor leg's destination from whatever comes after it
+  for (let i = 0; i < legs.length; i++) {
+    if (legs[i].type !== "outdoor") continue;
+    const next = legs.slice(i + 1).find(l => l.building);
+    const target = next || { building: state.to.building, floor: state.to.floor };
+    legs[i].building = target.building;
+    legs[i].floor = target.floor;
+  }
+
   for (const l of legs) {
     if (l.type === "walk") l.text = `Walk ${Math.round(l.distance)} m`;
     if (l.type === "outdoor") {

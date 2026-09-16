@@ -69,6 +69,9 @@ MAX_ENTRANCE_SNAP_M = 120.0
 # Keep OSM paths within this distance of a building we have plans for.
 NEAR_BUILDING_M = 450.0
 
+# Path fragments smaller than this are stubs that lead nowhere.
+MIN_PATH_COMPONENT_NODES = 20
+
 _to_3780 = pyproj.Transformer.from_crs("EPSG:4326", "EPSG:3780", always_xy=True)
 
 
@@ -195,11 +198,27 @@ def connect(campus, buildings, entrances, cache_dir):
                     if any(math.dist(key, c) <= NEAR_BUILDING_M for c in keep_near)]
         paths = paths.subgraph(relevant).copy()
 
-    # then the largest connected chunk - isolated fragments would only add noise
+    # Keep every reasonably-sized piece of what's left, not just the biggest.
+    #
+    # Taking only the largest component here was wrong twice over. Trimming to
+    # what's near a building *fragments* the network, so the largest surviving
+    # piece is not necessarily the one by any given building - Social Sciences
+    # and Science Theatres ended up unreachable despite sitting 48 m and 36 m
+    # from a path, because their bit of pavement wasn't in the winning
+    # fragment. And UCalgary is genuinely several campuses: Foothills and Spy
+    # Hill are kilometres from main campus and have their own path networks,
+    # which ought to serve their own buildings rather than be discarded.
+    #
+    # Very small fragments are still dropped, since a two-node stub gives a
+    # building an outdoor link that leads nowhere.
     if paths.number_of_nodes() == 0:
         return {"edges": 0, "error": "no walkable ways near any building"}
-    biggest = max(nx.connected_components(paths), key=len)
-    paths = paths.subgraph(biggest).copy()
+    keep = set()
+    for component in nx.connected_components(paths):
+        if len(component) >= MIN_PATH_COMPONENT_NODES:
+            keep |= component
+    if keep:
+        paths = paths.subgraph(keep).copy()
 
     index = {}
     for key, data in paths.nodes(data=True):

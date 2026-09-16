@@ -224,11 +224,18 @@ def pick_entrance(graph, code, footprint, floor_rooms, floor_order):
     if not candidates:
         return None
 
-    # prefer the lowest floor that is actually part of the main component
+    # Prefer a floor at ground level or above. Taking the lowest floor outright
+    # put Biological Sciences' entrance in Basement 2, so a route in from
+    # outside arrived in the basement and then climbed two flights to reach the
+    # ground floor - a real path through the graph, but not how anyone walks
+    # into that building. Basements are only used when a building has nothing
+    # else in its main component.
     floors_present = {d.get("floor") for _, d in candidates}
-    lowest = min(floors_present, key=floor_sort_key)
-    on_lowest = [(n, d) for n, d in candidates if d.get("floor") == lowest] or candidates
-    return min(on_lowest, key=lambda nd: boundary.distance(Point(nd[1]["pos"])))[0]
+    at_or_above_ground = [f for f in floors_present if floor_sort_key(f) >= 0]
+    chosen = (min(at_or_above_ground, key=floor_sort_key) if at_or_above_ground
+              else min(floors_present, key=floor_sort_key))
+    on_chosen = [(n, d) for n, d in candidates if d.get("floor") == chosen] or candidates
+    return min(on_chosen, key=lambda nd: boundary.distance(Point(nd[1]["pos"])))[0]
 
 
 def main():

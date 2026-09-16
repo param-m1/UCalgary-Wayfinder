@@ -1,0 +1,123 @@
+[
+ {
+  "code": "SB",
+  "floor": "01",
+  "closed_hairline_paths": 107,
+  "rooms_kept": 106,
+  "rooms_numbered": 96,
+  "frame_polygons_rejected": 1,
+  "labels_found": 106,
+  "labels_unmatched": 9,
+  "wall_paths": 28445
+ },
+ {
+  "code": "SB",
+  "floor": "01M",
+  "closed_hairline_paths": 5,
+  "rooms_kept": 4,
+  "rooms_numbered": 4,
+  "frame_polygons_rejected": 1,
+  "labels_found": 5,
+  "labels_unmatched": 1,
+  "wall_paths": 367
+ },
+ {
+  "code": "SB",
+  "floor": "02",
+  "closed_hairline_paths": 65,
+  "rooms_kept": 64,
+  "rooms_numbered": 60,
+  "frame_polygons_rejected": 1,
+  "labels_found": 62,
+  "labels_unmatched": 2,
+  "wall_paths": 26100
+ },
+ {
+  "code": "SB",
+  "floor": "03",
+  "closed_hairline_paths": 51,
+  "rooms_kept": 50,
+  "rooms_numbered": 48,
+  "frame_polygons_rejected": 1,
+  "labels_found": 52,
+  "labels_unmatched": 4,
+  "wall_paths": 5578
+ },
+ {
+  "code": "SB",
+  "floor": "04",
+  "closed_hairline_paths": 47,
+  "rooms_kept": 46,
+  "rooms_numbered": 42,
+  "frame_polygons_rejected": 1,
+  "labels_found": 47,
+  "labels_unmatched": 5,
+  "wall_paths": 5468
+ },
+ {
+  "code": "SB",
+  "floor": "05",
+  "closed_hairline_paths": 60,
+  "rooms_kept": 59,
+  "rooms_numbered": 56,
+  "frame_polygons_rejected": 1,
+  "labels_found": 61,
+  "labels_unmatched": 5,
+  "wall_paths": 7456
+ },
+ {
+  "code": "SB",
+  "floor": "06",
+  "closed_hairline_paths": 69,
+  "rooms_kept": 68,
+  "rooms_numbered": 62,
+  "frame_polygons_rejected": 1,
+  "labels_found": 65,
+  "labels_unmatched": 3,
+  "wall_paths": 7230
+ },
+ {
+  "code": "SB",
+  "floor": "07",
+  "closed_hairline_paths": 29,
+  "rooms_kept": 28,
+  "rooms_numbered": 20,
+  "frame_polygons_rejected": 1,
+  "labels_found": 23,
+  "labels_unmatched": 3,
+  "wall_paths": 1698
+ },
+ {
+  "code": "SB",
+  "floor": "08RF",
+  "closed_hairline_paths": 7,
+  "rooms_kept": 6,
+  "rooms_numbered": 6,
+  "frame_polygons_rejected": 1,
+  "labels_found": 9,
+  "labels_unmatched": 3,
+  "wall_paths": 811
+ },
+ {
+  "code": "SB",
+  "floor": "B1",
+  "closed_hairline_paths": 112,
+  "rooms_kept": 111,
+  "rooms_numbered": 108,
+  "frame_polygons_rejected": 1,
+  "labels_found": 112,
+  "labels_unmatched": 3,
+  "wall_paths": 10126
+ },
+ {
+  "code": "SB",
+  "floor": "B2",
+  "closed_hairline_paths": 5,
+  "rooms_kept": 4,
+  "rooms_numbered": 2,
+  "frame_polygons_rejected": 1,
+  "labels_found": 5,
+  "labels_unmatched": 3,
+  "wall_paths": 505
+ }
+]

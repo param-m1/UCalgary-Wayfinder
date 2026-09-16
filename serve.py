@@ -38,6 +38,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 return fh
         return super().send_head()
 
+    def end_headers(self):
+        # No caching. This is a development server, and a stale cached
+        # index.html cost me a round of "the fix didn't work" before I noticed
+        # the browser was running a copy from ten minutes earlier.
+        self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
     def log_message(self, *args):
         pass
 

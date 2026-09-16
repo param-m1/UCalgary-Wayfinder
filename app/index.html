@@ -399,7 +399,19 @@ function legsOf(result) {
     const kind = s.edge.kind;
     if (kind === "stairs" || kind === "vertical_unknown") {
       if (cur) { legs.push(cur); cur = null; }
+      // Climbing six floors is one instruction, not six. Merge a run of
+      // vertical links into a single step, and keep the more cautious wording
+      // if any flight in the run is only "stairs or lift".
+      const prev = legs[legs.length - 1];
+      if (prev && prev.type === "stairs") {
+        prev.floor = b.floor;
+        if (kind !== "stairs") prev.verified = false;
+        prev.text = `Take the ${prev.verified ? "stairs" : "stairs or lift"} from `
+                  + `${floorName(prev.fromFloor)} to ${floorName(b.floor)}`;
+        continue;
+      }
       legs.push({ type: "stairs", building: b.building, floor: b.floor,
+                  fromFloor: a.floor, verified: kind === "stairs",
                   text: `Take the ${kind === "stairs" ? "stairs" : "stairs or lift"} to ${floorName(b.floor)}`,
                   where: state.buildings[b.building]?.name || b.building });
       continue;
